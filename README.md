@@ -8,7 +8,7 @@ Automatic CW keying via an Arduino-compatible device attached to a relay (attach
 
 ![Screenshot of first transmission](media/first_transmission.png)
 
-- 10/1/2020 – Code written to completion and ready for distance testing.  First transmission (pictured above) was done using a dummy load on the S-Pixie QRP transceiver.  (Was picked up within a couple of feet using a USB RTL-SDR dongle.)
+- 10/1/2020 – Code written to completion and ready for distance testing.  First transmission (pictured above) was done using a dummy load on the S-Pixie QRP transceiver.  (Was picked up within a couple of feet using a USB RTL-SDR dongle, accompanying media can be found here: [media](media/))
 
 ## License
 
