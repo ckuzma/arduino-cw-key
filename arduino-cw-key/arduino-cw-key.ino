@@ -1,6 +1,6 @@
 // Set what pin we are keying on
 #define KEY_PIN LED_BUILTIN
-#define DIT_PAUSE 50
+#define DIT_PAUSE 30
 
 // For serial reading
 String inputString = "";
