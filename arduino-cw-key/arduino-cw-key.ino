@@ -1,19 +1,26 @@
 // Set what pin we are keying on
-#define KEY_PIN LED_BUILTIN
-#define DIT_PAUSE 30
+#define KEY_PIN 2
+#define DIT_PAUSE 60
 
 // For serial reading
 String inputString = "";
 bool stringComplete = false;
 
 /*
- [ Sounding intervals as-is: ]
-- DIT_PAUSE
-  - Single unit, dits, intra-character spaces
-- 3*DIT_PAUSE
-  - Three units, dahs, inter-character spaces
-- 7*DIT_PAUSE
-  - Seven units, inter-word spaces
+  [ Sounding intervals as-is: ]
+  
+  - DIT_PAUSE
+    - Single unit, dits, intra-character spaces
+  - 3*DIT_PAUSE
+    - Three units, dahs, inter-character spaces
+  - 7*DIT_PAUSE
+    - Seven units, inter-word spaces
+    
+  [ A note on adjusting DIT_PAUSE above: ]
+  - 240 =  5 wpm
+  - 120 = 10 wpm
+  - 60  = 20 wpm
+  - 30  = 40 wpm (realistically as fast as the relay can move)
 */
 
 // The Morse Code alphabet
@@ -67,13 +74,14 @@ void setup() {
   Serial.begin(9600);
   inputString.reserve(200); // 200 bytes set aside
   pinMode(KEY_PIN, OUTPUT);
+  Serial.println("READY");
 }
 
 void loop() {
   if(stringComplete) {
     // Convert to upper case
     inputString.toUpperCase();
-    Serial.println("\nKeying out: " + inputString);
+    Serial.print("\n" + inputString);
 
     // Get the CW string and key it out
     keyCWText(getCWText(inputString));
@@ -81,7 +89,7 @@ void loop() {
     // Erase data, set boolean to false
     inputString = "";
     stringComplete = false;
-    Serial.println("DONE");
+    Serial.println("\nDONE");
   }
 }
 
@@ -89,17 +97,21 @@ void keyCWText(String cwText) {
   for(int x=0; x<cwText.length(); x++) {
     String singleChar = String(cwText.charAt(x));
     if(singleChar == ".") {
+      Serial.print(".");
       dit();
       delay(DIT_PAUSE);
     }
     if(singleChar == "-") {
+      Serial.print("-");
       dah();
       delay(DIT_PAUSE);
     }
     if(singleChar == " ") {
+      Serial.print(" ");
       delay(3*DIT_PAUSE);
     }
     if(singleChar == "\n") {
+      Serial.print("| ");
       delay(7*DIT_PAUSE);
     }
   }
