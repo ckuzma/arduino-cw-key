@@ -20,7 +20,8 @@ bool stringComplete = false;
   - 240 =  5 wpm
   - 120 = 10 wpm
   - 60  = 20 wpm
-  - 30  = 40 wpm (realistically as fast as the relay can move)
+  - 30  = 40 wpm
+    - Realistically as fast as the relay can move
 */
 
 // The Morse Code alphabet
