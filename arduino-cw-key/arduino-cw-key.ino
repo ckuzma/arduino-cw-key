@@ -1,5 +1,5 @@
 // Set what pin we are keying on
-#define KEY_PIN 2
+#define KEY_PIN D0 // Onboard LED
 #define DIT_PAUSE 60
 
 // For serial reading
@@ -75,23 +75,32 @@ void setup() {
   Serial.begin(9600);
   inputString.reserve(200); // 200 bytes set aside
   pinMode(KEY_PIN, OUTPUT);
-  Serial.println("READY");
+  digitalWrite(KEY_PIN, HIGH); // Need to shut onboard LED off
+  delay(500); // Seems to be necessary for NodeMCU in order to indicate ready status
+  Serial.print("READY");
 }
 
 void loop() {
-  if(stringComplete) {
-    // Convert to upper case
-    inputString.toUpperCase();
-    Serial.print("\n" + inputString);
-
-    // Get the CW string and key it out
-    keyCWText(getCWText(inputString));
-
-    // Erase data, set boolean to false
-    inputString = "";
-    stringComplete = false;
-    Serial.println("\nDONE");
+  if(Serial.available()) {
+    serialEvent();
   }
+  if(stringComplete) {
+    processAndKey();
+  }
+}
+
+void processAndKey() {
+  // Convert to upper case
+  inputString.toUpperCase();
+  Serial.print("\n" + inputString);
+
+  // Get the CW string and key it out
+  keyCWText(getCWText(inputString));
+
+  // Erase data, set boolean to false
+  inputString = "";
+  stringComplete = false;
+  Serial.println("\nDONE");
 }
 
 void keyCWText(String cwText) {
@@ -179,28 +188,26 @@ String getCWText(String inputText) {
 }
 
 void dit() {
-  digitalWrite(KEY_PIN, HIGH);
-  delay(DIT_PAUSE);
   digitalWrite(KEY_PIN, LOW);
+  delay(DIT_PAUSE);
+  digitalWrite(KEY_PIN, HIGH);
 }
 
 void dah() {
-  digitalWrite(KEY_PIN, HIGH);
-  delay(3*DIT_PAUSE);
   digitalWrite(KEY_PIN, LOW);
+  delay(3*DIT_PAUSE);
+  digitalWrite(KEY_PIN, HIGH);
 }
 
 void serialEvent() {
-  while(Serial.available()) {
-    // Capture the new Byte
-    char inChar = (char)Serial.read();
-    
-    // Add to our inputString
-    inputString += inChar;
+  // Capture the new Byte
+  char inChar = (char)Serial.read();
+  
+  // Add to our inputString
+  inputString += inChar;
 
-    // Set the flag to true if complete
-    if(inChar == '\n') {
-      stringComplete = true;
-    }
+  // Set the flag to true if complete
+  if(inChar == '\n') {
+    stringComplete = true;
   }
 }
