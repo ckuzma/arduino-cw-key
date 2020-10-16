@@ -15,7 +15,7 @@ Automatic CW keying via an Arduino-compatible device attached to a relay (attach
 Utilize the _miniterm_ utility which comes bundled with [pyserial](https://pypi.org/project/pyserial/) to interact with the Arduino keyer (connected via USB serial).  Syntax:
 
 ```
-miniterm.py /dev/tty.usbserial-XXXXXX 115200
+miniterm.py /dev/tty.usbserial-XXXXXX 9600
 ```
 > Replace XXXXXX with whatever the device comes up on your system as.
 
